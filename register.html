@@ -117,7 +117,7 @@
     <body>
         <div class="container">
             <h1>Room Booking</h1>
-            <p class="welcome-message">Welcome to our Celefi Hotel! You can book a room now and enjoy luxury at its finest.</p>
+            <p class="welcome-message">Welcome to our Celefi Hotel! You can book a room now and enjoy luxury. </p>
             
             <form id="bookingForm">
                 <table>
@@ -127,7 +127,7 @@
                     </tr>
                     <tr>
                         <td><label for="roomNumber">Room Number:</label></td>
-                        <td><input type="number" id="roomNumber" required></td>
+                        <td><input type="text" id="roomNumber" required></td> 
                     </tr>
                     <tr>
                         <td><label for="dateOfBooking">Date of Booking:</label></td>
@@ -137,49 +137,42 @@
                         <td><label for="dateOfLeaving">Date of Leaving:</label></td>
                         <td><input type="date" id="dateOfLeaving" required></td>
                     </tr>
-                    <tr>
-                        <td><label for="roomPrice">Room Price (per night):</label></td>
-                        <td><input type="number" id="roomPrice" max="1000" required></td>
-                    </tr>
                 </table>
                 <button type="submit">Book Room</button>
             </form>
-    <p id="confirmingMessage" class="confirmation-message"></p>
-
-        <!-- Back to Home Button -->
-        <a href="index.html" class="back-button">Back to Home</a>
-    </div>
-
-    <script>
-        document.getElementById('bookingForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const roomNumber = document.getElementById('roomNumber').value;
-            const dateOfBooking = new Date(document.getElementById('dateOfBooking').value);
-            const dateOfLeaving = new Date(document.getElementById('dateOfLeaving').value);
-            
-            // Calculate the total number of nights
-            const totalNights = (dateOfLeaving - dateOfBooking) / (1000 * 3600 * 24);
-            
-            // Validate dates
-            if (dateOfLeaving <= dateOfBooking) {
-                document.getElementById('confirmingMessage').innerText = 'Date of leaving must be later than the date of booking.';
-                return;
-            }
-            
-            let totalPrice;
-            
-            // Calculate the total price based on nights
-            if (totalNights <= 4) {
-                totalPrice = 1000;
-            } else {
-                totalPrice = 500 * totalNights;
-            }
-
-            // Display confirmation message
-            document.getElementById('confirmingMessage').innerText = `Room ${roomNumber} has been booked for ${name} from ${dateOfBooking.toLocaleDateString()} to ${dateOfLeaving.toLocaleDateString()}. Total price: ${totalPrice} EGP.`;
-        });
-    </script>
-</body>
-</html>
+    
+            <p id="confirmingMessage" class="confirmation-message"></p>
+               
+            <a href="index.html" class="back-button">Back to Home</a>
+        </div>
+    
+        <script>
+            document.getElementById('bookingForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const roomNumber = parseInt(document.getElementById('roomNumber').value, 10); // Room number 
+                const dateOfBooking = new Date(document.getElementById('dateOfBooking').value);
+                const dateOfLeaving = new Date(document.getElementById('dateOfLeaving').value);
+                
+                // Calculate the total number of nights
+                const totalNights = (dateOfLeaving - dateOfBooking) / (1000 * 3600 * 24);
+                    
+                // Validate room number
+                if (isNaN(roomNumber) || roomNumber < 1) {
+                    document.getElementById('confirmingMessage').innerText = 'Please enter a valid positive room number.';
+                    return;
+                }
+    
+                // Validate dates
+                if (dateOfLeaving <= dateOfBooking) {
+                    document.getElementById('confirmingMessage').innerText = 'Date of leaving must be later than the date of booking.';
+                    return;
+                }
+                 // Calculate the total price based on nights
+                 const totalPrice = totalNights <= 4? 1000:500*totalNights;
+                // Display confirmation message
+                document.getElementById('confirmingMessage').innerText=`Room ${roomNumber} has been booked for ${name} from ${dateOfBooking.toLocaleDateString()} to ${dateOfLeaving.toLocaleDateString()}.Total price: ${totalPrice} EGP.`;
+            });
+        </script>
+    </body>
